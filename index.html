@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALCULADORA SOLAR - GERAR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .sun-path-bg {
+            background: #FFFFFF; 
+        }
+        #sun-pointer {
+            transition: transform 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 py-10">
+
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 space-y-8">
+            
+            <div class="text-center">
+                <img src="LOGOGERAR.png" alt="Logo GERAR" class="w-80 h-auto mx-auto mb-4">
+                
+                <h1 class="text-3xl font-bold text-gray-800 mt-4">CALCULADORA FOGÃO SOLAR - GERAR</h1>
+                <p class="text-gray-500 mt-2">Descubra a posição exata do Sol para maximizar a potência do seu fogão.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="latitude" class="block text-sm font-medium text-gray-700">Latitude</label>
+                    <input type="number" id="latitude" value="-22.7" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="longitude" class="block text-sm font-medium text-gray-700">Longitude</label>
+                    <input type="number" id="longitude" value="-43.68" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="date" class="block text-sm font-medium text-gray-700">Data</label>
+                    <input type="date" id="date" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="time-input" class="block text-sm font-medium text-gray-700">Hora do Dia</label>
+                    <div class="flex items-center gap-4 mt-1">
+                        <input type="time" id="time-input" class="w-auto px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <input type="range" id="time-range" min="0" max="1439" value="720" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-center text-gray-700">Posição do Sol no Horizonte</h3>
+                <div class="relative w-64 h-64 mx-auto mt-4 sun-path-bg rounded-full border-4 border-gray-300 flex items-center justify-center">
+                    <div class="absolute text-center text-gray-600 font-bold">
+                        <div class="text-xs -mt-28">N</div>
+                        <div class="text-xs mt-[13rem]">S</div>
+                        <div class="text-xs -ml-32 mt-[-0.3rem]">O</div>
+                        <div class="text-xs ml-32 mt-[-0.3rem]">L</div>
+                    </div>
+                    <div id="sun-pointer-container" class="absolute w-full h-full">
+                         <div id="sun-pointer" class="absolute top-1/2 left-0 w-1/2 h-1 origin-right">
+                              <div class="w-4 h-4 bg-yellow-400 rounded-full border-2 border-white shadow-lg -mt-[7px] -mr-2 float-right"></div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="results" class="mt-8 pt-6 border-t border-gray-200 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="bg-blue-100 p-4 rounded-lg">
+                    <h4 class="text-sm font-semibold text-blue-800">Direção (Azimute)</h4>
+                    <p id="azimuth-result" class="text-3xl font-bold text-blue-900">-</p>
+                </div>
+                <div class="bg-yellow-100 p-4 rounded-lg">
+                    <h4 class="text-sm font-semibold text-yellow-800">Inclinação (Altitude)</h4>
+                    <p id="altitude-result" class="text-3xl font-bold text-yellow-900">-</p>
+                </div>
+                <div class="bg-green-100 p-4 rounded-lg">
+                    <h4 class="text-sm font-semibold text-green-800">Potência Solar Estimada</h4>
+                    <p id="power-result" class="text-3xl font-bold text-green-900">-</p>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <h2 class="text-2xl font-bold text-center text-gray-700">Calculadora de Tempo para Ferver</h2>
+                <div class="mt-4 p-4 bg-green-50 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 items-center">
+                    <div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label for="volume-ml" class="block text-sm font-medium">Volume (ML)</label>
+                                <input type="number" id="volume-ml" value="1000" step="100" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label for="temp-inicial" class="block text-sm font-medium">Temp. Inicial (°C)</label>
+                                <input type="number" id="temp-inicial" value="25" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label for="area-fogao" class="block text-sm font-medium">Área (m²)</label>
+                                <input type="number" id="area-fogao" value="0.5" step="0.1" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label for="eficiencia" class="block text-sm font-medium">Eficiência Total Estimada: <span id="eficiencia-valor" class="font-bold">60%</span></label>
+                             <input type="range" id="eficiencia" min="30" max="90" value="60" class="mt-1 w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button id="calcular-tempo-btn" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 w-full">Calcular Tempo</button>
+                        <div id="ebulicao-resultado" class="mt-4 bg-white p-3 rounded-lg min-h-[60px] flex items-center justify-center font-semibold text-lg text-gray-800"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // O código Javascript permanece o mesmo.
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        document.getElementById('date').value = `${yyyy}-${mm}-${dd}`;
+
+        const latInput = document.getElementById('latitude');
+        const lonInput = document.getElementById('longitude');
+        const dateInput = document.getElementById('date');
+        
+        const timeInput = document.getElementById('time-input');
+        const timeRange = document.getElementById('time-range');
+        
+        const azimuthResult = document.getElementById('azimuth-result');
+        const altitudeResult = document.getElementById('altitude-result');
+        const powerResult = document.getElementById('power-result');
+        const sunPointer = document.getElementById('sun-pointer');
+        
+        let availablePower = 0;
+        
+        function calculateSunPosition() {
+            const lat = parseFloat(latInput.value);
+            const lon = parseFloat(lonInput.value);
+            const dateStr = dateInput.value;
+
+            if (isNaN(lat) || isNaN(lon) || !dateStr) {
+                azimuthResult.textContent = '-';
+                altitudeResult.textContent = '-';
+                powerResult.textContent = '-';
+                return;
+            }
+            
+            const localDate = new Date(`${dateStr}T00:00:00`);
+            const totalMinutes = parseInt(timeRange.value);
+            localDate.setMinutes(totalMinutes);
+            
+            const deg2rad = (deg) => deg * Math.PI / 180;
+            const rad2deg = (rad) => rad * 180 / Math.PI;
+
+            const dayOfYear = (Date.UTC(localDate.getFullYear(), localDate.getMonth(), localDate.getDate()) - Date.UTC(localDate.getFullYear(), 0, 0)) / 86400000;
+            
+            const b = deg2rad(360/365 * (dayOfYear - 81));
+            const eot = 9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b);
+            const lstm = 15 * Math.round(lon / 15);
+            const tc = 4 * (lon - lstm) + eot;
+            const localSolarTime = (localDate.getHours() * 60 + localDate.getMinutes() + tc) / 60;
+            
+            const hra = deg2rad(15 * (localSolarTime - 12));
+            const declination = deg2rad(-23.45 * Math.cos(deg2rad(360 / 365 * (dayOfYear + 10))));
+            const latRad = deg2rad(lat);
+            const altitudeRad = Math.asin(Math.sin(declination) * Math.sin(latRad) + Math.cos(declination) * Math.cos(latRad) * Math.cos(hra));
+            const altitude = rad2deg(altitudeRad);
+            const azimuthRad = Math.acos((Math.sin(declination) * Math.cos(latRad) - Math.cos(declination) * Math.sin(latRad) * Math.cos(hra)) / Math.cos(altitudeRad));
+            let azimuth = rad2deg(azimuthRad);
+
+            if (localSolarTime > 12) {
+                azimuth = 360 - azimuth;
+            }
+            
+            const maxPowerPerM2 = 1000; // W/m^2
+            const powerRad = Math.sin(altitudeRad);
+            availablePower = altitude > 0 ? maxPowerPerM2 * powerRad : 0;
+
+            if (altitude > 0) {
+                azimuthResult.textContent = `${azimuth.toFixed(1)}°`;
+                altitudeResult.textContent = `${altitude.toFixed(1)}°`;
+                powerResult.textContent = `${availablePower.toFixed(0)} W/m²`;
+                sunPointer.style.transform = `rotate(${azimuth}deg)`;
+            } else {
+                azimuthResult.textContent = 'Abaixo';
+                altitudeResult.textContent = 'do Horizonte';
+                powerResult.textContent = '0 W/m²';
+                sunPointer.style.transform = `rotate(0deg)`;
+            }
+        }
+        
+        timeInput.addEventListener('input', () => {
+            const [hours, minutes] = timeInput.value.split(':');
+            const totalMinutes = parseInt(hours) * 60 + parseInt(minutes);
+            if (!isNaN(totalMinutes)) {
+                timeRange.value = totalMinutes;
+                calculateSunPosition();
+            }
+        });
+
+        timeRange.addEventListener('input', () => {
+            const totalMinutes = parseInt(timeRange.value);
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            timeInput.value = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+            calculateSunPosition();
+        });
+
+        const calcularTempoBtn = document.getElementById('calcular-tempo-btn');
+        const resultadoDiv = document.getElementById('ebulicao-resultado');
+
+        calcularTempoBtn.addEventListener('click', () => {
+            const volumeML = parseFloat(document.getElementById('volume-ml').value);
+            const tempInicial = parseFloat(document.getElementById('temp-inicial').value);
+            const eficiencia = parseFloat(document.getElementById('eficiencia').value) / 100;
+            const area = parseFloat(document.getElementById('area-fogao').value);
+            const volumeL = volumeML / 1000;
+            const potenciaEfetiva = availablePower * area * eficiencia;
+            const calorEspecificoAgua = 4186;
+            const deltaTemp = 100 - tempInicial;
+            const energiaNecessaria = volumeL * calorEspecificoAgua * deltaTemp;
+            
+            if (deltaTemp <= 0) {
+                 resultadoDiv.innerHTML = `<p class="text-green-700">A água já está a ferver!</p>`;
+                 return;
+            }
+            if (potenciaEfetiva <= 10) {
+                resultadoDiv.innerHTML = `<p class="text-red-700">Potência solar insuficiente.</p>`;
+                return;
+            }
+            const tempoSegundos = energiaNecessaria / potenciaEfetiva;
+            const tempoMinutos = tempoSegundos / 60;
+            resultadoDiv.innerHTML = `~ ${Math.round(tempoMinutos)} minutos`;
+        });
+
+        const eficienciaSlider = document.getElementById('eficiencia');
+        eficienciaSlider.addEventListener('input', () => {
+            document.getElementById('eficiencia-valor').textContent = `${eficienciaSlider.value}%`;
+        });
+
+        [latInput, lonInput, dateInput].forEach(el => el.addEventListener('input', calculateSunPosition));
+
+        window.addEventListener('load', () => {
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            timeRange.value = currentMinutes;
+            timeRange.dispatchEvent(new Event('input'));
+        });
+    </script>
+</body>
+</html>
